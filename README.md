@@ -10,6 +10,7 @@ The current focus is Andrej Karpathy's neural-network courses, starting from fir
 | --- | --- | --- |
 | [micrograd](micrograd/) | Completed first pass | Autograd, backpropagation, MLP training loop |
 | [makemore](makemore/) | Starting | Character-level language modeling |
+| [nanoGPT](nanogpt/) | Preparing | GPT-from-scratch, Transformer, self-attention |
 
 ## Repo Structure
 
@@ -17,6 +18,7 @@ The current focus is Andrej Karpathy's neural-network courses, starting from fir
 .
 ├── micrograd/      micrograd notebooks and recall practice
 ├── makemore/       makemore notes, notebooks, and future code
+├── nanogpt/        nanoGPT notes, notebooks, and data
 ├── requirements.txt
 └── README.md
 ```
