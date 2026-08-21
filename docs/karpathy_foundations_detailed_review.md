@@ -20,31 +20,31 @@ data
 
 写成数学形式：
 
-1. 模型通过参数 \(\theta\) 产生预测：
+1. 模型通过参数 $\theta$ 产生预测：
 
-   \[
+   $$
    \hat y = f_\theta(x)
-   \]
+   $$
 
 2. loss function 把预测和正确答案变成一个标量：
 
-   \[
+   $$
    L(\theta) = \operatorname{loss}(f_\theta(x), y)
-   \]
+   $$
 
 3. backpropagation 计算：
 
-   \[
+   $$
    \frac{\partial L}{\partial \theta}
-   \]
+   $$
 
 4. gradient descent 更新参数：
 
-   \[
+   $$
    \theta \leftarrow \theta - \eta \frac{\partial L}{\partial \theta}
-   \]
+   $$
 
-其中 \(\eta\) 是 learning rate。
+其中 $\eta$ 是 learning rate。
 
 后面的课程不断更换 `f` 的结构，但这个闭环没有改变。
 
@@ -84,11 +84,11 @@ d = c + a
 
 forward pass 是：
 
-\[
+$$
 c = ab = 6,
 \qquad
 d = c+a = 8
-\]
+$$
 
 计算图是：
 
@@ -105,26 +105,26 @@ b ─────> multiply
 
 对于：
 
-\[
+$$
 c=ab
-\]
+$$
 
 局部导数是：
 
-\[
+$$
 \frac{\partial c}{\partial a}=b,
 \qquad
 \frac{\partial c}{\partial b}=a
-\]
+$$
 
-如果最终目标是 \(d\)，那么：
+如果最终目标是 $d$，那么：
 
-\[
+$$
 \frac{\partial d}{\partial a}
 =
 \frac{\partial d}{\partial c}
 \frac{\partial c}{\partial a}
-\]
+$$
 
 这就是 chain rule：上游传来的梯度，乘以当前节点的局部导数，再传给父节点。
 
@@ -142,13 +142,13 @@ self.grad
 
 上面的 `a` 同时直接进入 `d = c + a`，又通过 `c = a * b` 间接进入 `d`：
 
-\[
+$$
 \frac{\partial d}{\partial a}
 =
 \underbrace{1}_{a\to d}
 +
 \underbrace{b}_{a\to c\to d}
-\]
+$$
 
 所以 backward 中通常是：
 
@@ -176,23 +176,23 @@ backward 必须从最终 `loss` 向前走，而且一个节点要先收到所有
 
 `loss.grad = 1` 是因为：
 
-\[
+$$
 \frac{\partial L}{\partial L}=1
-\]
+$$
 
 ### 1.6 从 `Value` 到 Neuron、Layer、MLP
 
 一个 neuron 做的事情通常是：
 
-\[
+$$
 z = w_1x_1+w_2x_2+\cdots+w_nx_n+b
-\]
+$$
 
 再经过 activation function：
 
-\[
+$$
 o=\tanh(z)
-\]
+$$
 
 多个 neuron 构成 `Layer`，多个 layer 构成 `MLP`：
 
@@ -210,9 +210,9 @@ input x
 
 对于数值预测，可以使用 squared error：
 
-\[
+$$
 L=\sum_i(\hat y_i-y_i)^2
-\]
+$$
 
 当预测偏离目标时，loss 变大。调用：
 
@@ -271,11 +271,11 @@ Bigram 假设非常简单：
 
 数学上：
 
-\[
+$$
 P(x_{t+1}\mid x_1,\ldots,x_t)
 \approx
 P(x_{t+1}\mid x_t)
-\]
+$$
 
 例如名字 `emma`，加入开始/结束字符 `.`：
 
@@ -307,15 +307,15 @@ N[i, j]
 
 把第 `i` 行归一化：
 
-\[
+$$
 P_{ij}=\frac{N_{ij}}{\sum_k N_{ik}}
-\]
+$$
 
 就得到：
 
-\[
+$$
 P_{ij}=P(\text{next}=j\mid\text{current}=i)
-\]
+$$
 
 这里 `P[i]` 是完整的 next-character distribution，不是单个概率。
 
@@ -343,35 +343,35 @@ current = '.'
 
 在模型假设下，整个数据出现的 likelihood（似然）是这些正确答案概率的乘积：
 
-\[
+$$
 \mathcal L
 =
 \prod_{i=1}^{N}p_i
 =
 0.5\times0.4\times0.1
-\]
+$$
 
 模型越好，真实数据中的字符转移应当得到越高概率，所以目标是：
 
-\[
+$$
 \max \mathcal L
-\]
+$$
 
 ### 2.5 为什么变成 log-likelihood
 
 大量小概率相乘会非常接近 0，数值不稳定。使用：
 
-\[
+$$
 \log(ab)=\log a+\log b
-\]
+$$
 
 于是：
 
-\[
+$$
 \log\mathcal L
 =
 \sum_i\log p_i
-\]
+$$
 
 最大化 likelihood 与最大化 log-likelihood 得到相同最优点，因为 `log` 是单调递增函数。
 
@@ -379,21 +379,21 @@ current = '.'
 
 训练代码习惯最小化目标，而我们希望最大化 log-likelihood，所以取负号：
 
-\[
+$$
 \operatorname{NLL}
 =
 -\sum_i\log p_i
-\]
+$$
 
 再除以样本数，让不同 batch 的 loss 可比较：
 
-\[
+$$
 \boxed{
 L
 =
 -\frac{1}{N}\sum_{i=1}^{N}\log p_i
 }
-\]
+$$
 
 这就是 negative log-likelihood（负对数似然，NLL）。
 
@@ -401,11 +401,11 @@ L
 
 对单个样本：
 
-\[
+$$
 L_i=-\log p_i
-\]
+$$
 
-其中 \(p_i\) 只是真实 next character 的预测概率。
+其中 $p_i$ 只是真实 next character 的预测概率。
 
 | 正确字符概率 | NLL | 含义 |
 | ---: | ---: | --- |
@@ -420,9 +420,9 @@ NLL 不是对所有概率求和。所有类别的概率本来就等于 1。它�
 
 未出现过的 bigram 会有 `N[i, j] == 0`，归一化后概率也是 0：
 
-\[
+$$
 -\log 0=+\infty
-\]
+$$
 
 因此可以使用简单的 add-one smoothing：
 
@@ -500,9 +500,9 @@ logits = [-1.2, 0.7, 3.1, ...]
 
 给所有 logits 同时加上一个常数，softmax 结果不变：
 
-\[
+$$
 \operatorname{softmax}(z+c)=\operatorname{softmax}(z)
-\]
+$$
 
 所以绝对大小不是重点，类别之间的差值才是重点。
 
@@ -510,17 +510,17 @@ logits = [-1.2, 0.7, 3.1, ...]
 
 首先用指数函数变成正数：
 
-\[
+$$
 c_k=e^{z_k}
-\]
+$$
 
 再归一化：
 
-\[
+$$
 p_k
 =
 \frac{e^{z_k}}{\sum_j e^{z_j}}
-\]
+$$
 
 这就是 softmax。
 
@@ -539,35 +539,35 @@ probs = torch.softmax(logits, dim=1)
 
 ### 3.5 `logits` 如何与 NLL 发生关系
 
-假设正确类别是 \(y\)。softmax 给它的概率是：
+假设正确类别是 $y$。softmax 给它的概率是：
 
-\[
+$$
 p_y
 =
 \frac{e^{z_y}}{\sum_j e^{z_j}}
-\]
+$$
 
 NLL 是：
 
-\[
+$$
 L=-\log p_y
-\]
+$$
 
 代入 softmax：
 
-\[
+$$
 L
 =
 -\log\left(\frac{e^{z_y}}{\sum_j e^{z_j}}\right)
-\]
+$$
 
 利用对数规则：
 
-\[
+$$
 \boxed{
 L=-z_y+\log\sum_j e^{z_j}
 }
-\]
+$$
 
 这个公式直接揭示了 loss 对 logits 的要求：
 
@@ -580,27 +580,27 @@ L=-z_y+\log\sum_j e^{z_j}
 
 ### 3.6 NLL、Cross-entropy、`F.cross_entropy` 的关系
 
-当 target 是一个确定类别时，可以把它写成 one-hot distribution \(q\)：
+当 target 是一个确定类别时，可以把它写成 one-hot distribution $q$：
 
-\[
+$$
 q_k=
 \begin{cases}
 1,&k=y\\
 0,&k\ne y
 \end{cases}
-\]
+$$
 
 cross-entropy 是：
 
-\[
+$$
 H(q,p)=-\sum_k q_k\log p_k
-\]
+$$
 
-因为只有正确类别的 \(q_y=1\)，所以：
+因为只有正确类别的 $q_y=1$，所以：
 
-\[
+$$
 H(q,p)=-\log p_y
-\]
+$$
 
 这正是 NLL。
 
@@ -622,37 +622,37 @@ loss_builtin = F.cross_entropy(logits, targets)
 
 ### 3.7 最重要的一步：loss 怎样真的改变 neural network
 
-对单个样本，cross-entropy 对第 \(k\) 个 logit 的导数是：
+对单个样本，cross-entropy 对第 $k$ 个 logit 的导数是：
 
-\[
+$$
 \boxed{
 \frac{\partial L}{\partial z_k}
 =
 p_k-\mathbb 1[k=y]
 }
-\]
+$$
 
 分两种情况：
 
-正确类别 \(k=y\)：
+正确类别 $k=y$：
 
-\[
+$$
 \frac{\partial L}{\partial z_y}=p_y-1
-\]
+$$
 
-因为 \(p_y<1\)，这个梯度通常是负数。gradient descent 执行：
+因为 $p_y<1$，这个梯度通常是负数。gradient descent 执行：
 
-\[
+$$
 z_y\leftarrow z_y-\eta(p_y-1)
-\]
+$$
 
 所以正确类别的 logit 会增大。
 
-错误类别 \(k\ne y\)：
+错误类别 $k\ne y$：
 
-\[
+$$
 \frac{\partial L}{\partial z_k}=p_k
-\]
+$$
 
 它是正数，所以 gradient descent 会减小错误类别的 logit。
 
@@ -671,31 +671,31 @@ wrong logits ↓
 
 假设三个类别的 logits 是：
 
-\[
+$$
 z=[2,1,0]
-\]
+$$
 
 正确答案是第 2 类，也就是 index 1。
 
 softmax 后大约是：
 
-\[
+$$
 p=[0.665,0.245,0.090]
-\]
+$$
 
 正确答案概率只有 `0.245`，所以：
 
-\[
+$$
 L=-\log(0.245)\approx1.407
-\]
+$$
 
 对 logits 的梯度是：
 
-\[
+$$
 p-onehot(y)
 =
 [0.665,-0.755,0.090]
-\]
+$$
 
 gradient descent 更新后：
 
@@ -709,17 +709,17 @@ gradient descent 更新后：
 
 因为：
 
-\[
+$$
 z=xW
-\]
+$$
 
 所以 chain rule 给出：
 
-\[
+$$
 \frac{\partial L}{\partial W}
 =
 x^T\frac{\partial L}{\partial z}
-\]
+$$
 
 `x` 是 one-hot，因此只有当前输入字符对应的 `W` 那一行会收到更新。
 
@@ -768,17 +768,17 @@ input representation
 
 Bigram 只看一个字符：
 
-\[
+$$
 P(x_{t+1}\mid x_t)
-\]
+$$
 
 但名字中的模式通常依赖更长上下文。例如当前都是 `m`，前面是 `em` 还是 `am`，下一字符的分布可能不同。
 
 MLP 改为：
 
-\[
+$$
 P(x_{t+1}\mid x_{t-block\_size+1},\ldots,x_t)
-\]
+$$
 
 ### 4.2 Dataset 变成 sliding context window
 
@@ -867,9 +867,9 @@ character indices
 
 第一层的输入宽度是：
 
-\[
+$$
 block\_size\times embedding\_dim
-\]
+$$
 
 所以从：
 
@@ -936,15 +936,15 @@ loss = F.cross_entropy(logits, Y)
 
 如果 vocabulary size 是 27，而且模型一开始完全不知道答案，理想情况是均匀预测：
 
-\[
+$$
 p_k=\frac1{27}
-\]
+$$
 
 对应的初始 loss：
 
-\[
+$$
 -\log\frac1{27}=\log27\approx3.296
-\]
+$$
 
 如果初始 loss 远高于这个值，说明随机 logits 差距太大，模型一开始就在没有依据地做非常自信的预测。
 
@@ -961,9 +961,9 @@ h = torch.tanh(hpreact)
 
 导数是：
 
-\[
+$$
 \frac{d}{dx}\tanh(x)=1-\tanh^2(x)
-\]
+$$
 
 如果 `hpreact` 绝对值太大，`tanh` 输出接近 `-1` 或 `1`，导数接近 0：
 
@@ -993,15 +993,15 @@ W = torch.randn(fan_in, fan_out) / fan_in**0.5
 
 对一个 mini-batch 的 pre-activation：
 
-\[
+$$
 \hat x=\frac{x-\mu_B}{\sqrt{\sigma_B^2+\epsilon}}
-\]
+$$
 
 再使用可学习参数：
 
-\[
+$$
 y=\gamma\hat x+\beta
-\]
+$$
 
 其中：
 
@@ -1070,11 +1070,11 @@ loss = -logprobs[range(B), Y].mean()
 
 减去每行最大 logit 不改变 softmax：
 
-\[
+$$
 \frac{e^{z_k-m}}{\sum_j e^{z_j-m}}
 =
 \frac{e^{z_k}}{\sum_j e^{z_j}}
-\]
+$$
 
 但它避免 `exp(very_large_number)` 溢出，是 numerical stability，而不是模型逻辑变化。
 
@@ -1113,9 +1113,9 @@ dlogits /= B
 
 也就是：
 
-\[
+$$
 dlogits=\frac{probs-onehot(Y)}{B}
-\]
+$$
 
 这再次连接了概率目标和训练动作：模型预测概率与真实 distribution 的差，就是 logits 直接收到的学习信号。
 
@@ -1285,11 +1285,11 @@ self-attention 的作用是让当前位置根据前面多个位置动态收集�
 
 最终仍然是：
 
-\[
+$$
 P(x_{t+1}\mid x_{\le t})
 =
 \operatorname{softmax}(logits_t)
-\]
+$$
 
 训练仍然最小化真实 next token 的平均 NLL。
 
@@ -1299,7 +1299,7 @@ P(x_{t+1}\mid x_{\le t})
 
 ### 9.1 模型的职责：产生 logits
 
-不同模型只是使用不同方法产生 \(z\)：
+不同模型只是使用不同方法产生 $z$：
 
 | 模型 | logits 从哪里来 |
 | --- | --- |
@@ -1310,38 +1310,38 @@ P(x_{t+1}\mid x_{\le t})
 
 ### 9.2 Softmax 的职责：把相对分数变成概率
 
-\[
+$$
 p_k=\frac{e^{z_k}}{\sum_j e^{z_j}}
-\]
+$$
 
 ### 9.3 NLL 的职责：评价真实答案得到多少概率
 
-\[
+$$
 L=-\log p_y
-\]
+$$
 
 ### 9.4 Backprop 的职责：计算参数怎样影响 loss
 
 首先：
 
-\[
+$$
 \frac{\partial L}{\partial z_k}=p_k-\mathbb{1}[k=y]
-\]
+$$
 
 然后通过 chain rule：
 
-\[
+$$
 \frac{\partial L}{\partial\theta}
 =
 \frac{\partial L}{\partial z}
 \frac{\partial z}{\partial\theta}
-\]
+$$
 
 ### 9.5 Gradient descent 的职责：实际改变参数
 
-\[
+$$
 \theta\leftarrow\theta-\eta\frac{\partial L}{\partial\theta}
-\]
+$$
 
 最终因果链：
 
