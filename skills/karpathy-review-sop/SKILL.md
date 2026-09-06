@@ -1,6 +1,6 @@
 ---
 name: karpathy-review-sop
-description: Use this skill when reviewing a Karpathy course lesson that has already been passively watched once and the goal is consolidation, recall, red/green diffing against the original notebook, bounded variations, and a Feynman-style explanation. Trigger for requests like "按之前的 Karpathy 复习 SOP 走一遍", "开始这节课的巩固", "用 3 小时 SOP 复习 makemore/micrograd", or when the user asks to follow the established review workflow rather than a generic study plan.
+description: Run the established timed Karpathy review SOP for an already-watched lesson. Skip first-pass learning and generic study planning.
 ---
 
 # Karpathy Review SOP
